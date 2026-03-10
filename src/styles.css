@@ -231,3 +231,319 @@ main.container { flex: 1; padding: 26px 0 40px; }
   background: rgba(124,92,255,0.08);
   border-radius: 12px;
 }
+
+/* ---------- Navbar user area ---------- */
+
+.navAuth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navUser {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  font-size: 14px;
+}
+
+
+/* ---------- Login Modal Overlay ---------- */
+
+.authModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(8, 15, 30, 0.35);
+
+  backdrop-filter: blur(6px);
+}
+
+
+/* ---------- Modal container ---------- */
+
+.authModal {
+  position: relative;
+
+  width: min(460px, 92vw);
+
+  padding: 40px 36px 32px;
+
+  border-radius: 24px;
+
+  background: rgba(255, 255, 255, 0.08);
+
+  border: 1px solid rgba(255, 255, 255, 0.16);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+
+  backdrop-filter: blur(18px);
+
+  text-align: center;
+}
+
+
+/* ---------- Close button ---------- */
+
+.authClose {
+  position: absolute;
+
+  top: 12px;
+  right: 14px;
+
+  border: none;
+
+  background: transparent;
+
+  color: white;
+
+  font-size: 26px;
+
+  cursor: pointer;
+}
+
+
+/* ---------- Logo text ---------- */
+
+.authLogo {
+  margin-bottom: 22px;
+
+  color: white;
+
+  font-size: 28px;
+
+  font-weight: 700;
+
+  letter-spacing: 2px;
+}
+
+
+/* ---------- Login form ---------- */
+
+.authGlassForm {
+  width: 100%;
+  
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 14px;
+}
+
+
+/* ---------- Input fields ---------- */
+
+.authGlassForm input {
+
+  height: 44px;
+
+  border: none;
+
+  outline: none;
+
+  border-radius: 999px;
+
+  padding: 0 16px;
+
+  color: white;
+
+  background: rgba(255, 255, 255, 0.16);
+
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+.authGlassForm input::placeholder {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+
+/* ---------- Submit button ---------- */
+
+.authSubmitBtn {
+
+  margin-top: 6px;
+
+  height: 44px;
+
+  border: none;
+
+  border-radius: 999px;
+
+  cursor: pointer;
+
+  font-weight: 700;
+
+  color: white;
+
+  background: linear-gradient(90deg, #3b82f6, #2563eb);
+
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+}
+
+
+/* ---------- small buttons ---------- */
+
+.authActionsRow {
+
+  margin-top: 14px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 10px;
+}
+
+.authTextBtn {
+
+  border: none;
+
+  background: transparent;
+
+  color: rgba(255,255,255,0.9);
+
+  cursor: pointer;
+
+  font-size: 13px;
+}
+
+
+/* ---------- Guest login ---------- */
+
+.authGuestRow {
+
+  margin-top: 18px;
+}
+
+.authGuestBtn {
+
+  border: none;
+
+  background: transparent;
+
+  color: rgba(255,255,255,0.95);
+
+  cursor: pointer;
+
+  font-size: 14px;
+
+  text-decoration: underline;
+}
+
+
+/* ---------- Error message ---------- */
+
+.authError {
+
+  padding: 10px 12px;
+
+  border-radius: 12px;
+
+  color: #ffe3e3;
+
+  background: rgba(255, 77, 77, 0.16);
+
+  border: 1px solid rgba(255, 77, 77, 0.28);
+
+  font-size: 13px;
+
+  text-align: left;
+}
+
+.passwordHint {
+  margin-top: -2px;
+  margin-bottom: 2px;
+  text-align: left;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.passwordHint--weak {
+  color: #ffd6d6;
+  background: rgba(255, 77, 77, 0.14);
+  border: 1px solid rgba(255, 77, 77, 0.22);
+}
+
+.passwordHint--medium {
+  color: #ffe9bf;
+  background: rgba(255, 193, 7, 0.14);
+  border: 1px solid rgba(255, 193, 7, 0.22);
+}
+
+.passwordHint--strong {
+  color: #d8ffe1;
+  background: rgba(34, 197, 94, 0.14);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+}
+
+.passwordRule {
+  margin-top: -4px;
+  margin-bottom: 2px;
+  padding: 0 4px;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.inputHint {
+  margin-bottom: -6px;
+  padding: 0 4px;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.inputHint--success {
+  color: rgba(140, 255, 180, 0.82);
+}
+
+.inputHint--error {
+  color: rgba(255, 170, 170, 0.85);
+}
+
+.strengthBar {
+  width: 100%;
+  height: 8px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.strengthBarFill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  transition: width 0.25s ease, background 0.25s ease;
+}
+
+.strengthBarFill--weak {
+  background: #ef4444;
+}
+
+.strengthBarFill--medium {
+  background: #f59e0b;
+}
+
+.strengthBarFill--strong {
+  background: #22c55e;
+}
+
+.strengthText {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding: 0 4px;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.5);
+}

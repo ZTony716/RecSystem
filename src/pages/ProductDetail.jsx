@@ -47,7 +47,7 @@ export default function ProductDetail() {
           <p className="detail__desc">{product.desc}</p>
 
           <div className="detail__note">
-            ✅ This page logs a <b>product_view</b> event into <code>localStorage</code>.
+            This page logs a <b>product_view</b> event into <code>localStorage</code>.
           </div>
         </div>
 

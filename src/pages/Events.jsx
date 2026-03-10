@@ -1,18 +1,16 @@
 import React, { useMemo, useState } from "react";
 import { clearEvents, readEvents } from "../utils/storage.js";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Events() {
-  const [refresh, setRefresh] = useState(0);
+  const { user, isLoggedIn } = useAuth();
+  const [version, setVersion] = useState(0);
 
-  const events = useMemo(() => {
-    const list = readEvents();
-    // newest first
-    return list.slice().reverse();
-  }, [refresh]);
+  const events = useMemo(() => readEvents(), [version, user]);
 
   function onClear() {
     clearEvents();
-    setRefresh((x) => x + 1);
+    setVersion((v) => v + 1);
   }
 
   return (
@@ -20,15 +18,17 @@ export default function Events() {
       <div className="pageHeader">
         <div>
           <h2>Tracking Events</h2>
-          <p className="muted">This is your “user behavior tracking module” (stored in localStorage).</p>
+          <p className="muted">
+            Viewing records for <b>{isLoggedIn ? user.username : "Guest"}</b>.
+          </p>
         </div>
-        <button className="btn btn--danger" onClick={onClear}>Clear Events</button>
+        <button className="btn btn--danger" onClick={onClear}>
+          Clear Events
+        </button>
       </div>
 
       {events.length === 0 ? (
-        <div className="empty">
-          No events yet. Go to <b>Products</b>, search and view a product.
-        </div>
+        <div className="empty">No events yet. Go to Products and interact with items.</div>
       ) : (
         <div className="tableWrap">
           <table className="table">

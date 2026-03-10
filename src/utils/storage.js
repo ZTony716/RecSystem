@@ -1,8 +1,13 @@
-const EVENTS_KEY = "demo_events_v1";
+import { getCurrentUser } from "./auth.js";
+
+function getEventsKey() {
+  const user = getCurrentUser();
+  return user ? `demo_events_${user.id}` : "demo_events_guest";
+}
 
 export function readEvents() {
   try {
-    const raw = localStorage.getItem(EVENTS_KEY);
+    const raw = localStorage.getItem(getEventsKey());
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -10,19 +15,21 @@ export function readEvents() {
 }
 
 export function writeEvents(events) {
-  localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
+  localStorage.setItem(getEventsKey(), JSON.stringify(events));
 }
 
 export function logEvent(event) {
   const events = readEvents();
+
   events.push({
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
     ts: new Date().toISOString(),
     ...event,
   });
+
   writeEvents(events);
 }
 
 export function clearEvents() {
-  localStorage.removeItem(EVENTS_KEY);
+  localStorage.removeItem(getEventsKey());
 }

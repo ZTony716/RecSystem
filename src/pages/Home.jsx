@@ -2,9 +2,11 @@ import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { getRecommendations } from "../utils/recommendation.js";
 import RecommendedList from "../components/RecommendedList.jsx";
+import { useAuth } from "../context/AuthContext.jsx";
 
 export default function Home() {
-  const recs = useMemo(() => getRecommendations(6), []);
+  const { user, isLoggedIn } = useAuth();
+  const recs = useMemo(() => getRecommendations(6), [user]);
 
   return (
     <div className="stack">
@@ -12,7 +14,8 @@ export default function Home() {
         <div className="hero__text">
           <h1>Integrated Intelligent Recommendation System</h1>
           <p className="muted">
-            React demo: browsing + search + behavior tracking + personalized recommendations (LocalStorage).
+            Current mode: <b>{isLoggedIn ? user.username : "Guest"}</b>. Browse, search,
+            track behavior, and get personalized recommendations.
           </p>
           <div className="hero__actions">
             <Link className="btn" to="/products">Browse Products</Link>
@@ -30,8 +33,8 @@ export default function Home() {
             <div className="kpi__value">Favorite category</div>
           </div>
           <div className="kpi">
-            <div className="kpi__label">Storage</div>
-            <div className="kpi__value">localStorage</div>
+            <div className="kpi__label">User Mode</div>
+            <div className="kpi__value">{isLoggedIn ? "Logged in" : "Guest"}</div>
           </div>
         </div>
       </section>

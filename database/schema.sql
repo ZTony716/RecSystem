@@ -128,3 +128,11 @@ CREATE TABLE recommendations (
         REFERENCES products(product_id)
         ON DELETE CASCADE
 );
+
+-- Recommdation add index 
+CREATE INDEX idx_products_category_id ON products(category_id);
+CREATE INDEX idx_user_events_user_id ON user_events(user_id);
+CREATE INDEX idx_user_events_product_id ON user_events(product_id);
+CREATE INDEX idx_user_events_event_type ON user_events(event_type);
+CREATE INDEX idx_search_history_user_id ON search_history(user_id);
+CREATE INDEX idx_recommendations_user_id ON recommendations(user_id);

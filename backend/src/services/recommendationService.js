@@ -2,7 +2,7 @@ const pool = require("../db");
 
 async function getRecommendations(userId) {
 
-  // 1 找用户浏览最多的 category
+  // 1 Find the most viewed  category by users
   const categoryQuery = `
     SELECT p.category_id, COUNT(*) AS view_count
     FROM user_events e
@@ -17,7 +17,7 @@ async function getRecommendations(userId) {
 
   const categoryResult = await pool.query(categoryQuery, [userId]);
 
-  // 如果用户有浏览记录
+  // If the user has browsing history
   if (categoryResult.rows.length > 0) {
 
     const categoryId = categoryResult.rows[0].category_id;
@@ -42,7 +42,7 @@ async function getRecommendations(userId) {
     return result.rows;
   }
 
-  // 如果没有浏览记录 -> 推荐热门商品
+  // If you have no browsing history -> Recommend popular products
   const popularQuery = `
     SELECT
       p.product_id,
@@ -69,4 +69,5 @@ async function getRecommendations(userId) {
 
 module.exports = {
   getRecommendations
+
 };

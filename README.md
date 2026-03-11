@@ -58,3 +58,119 @@ The goal of this project is to simulate a real-world intelligent recommendation 
 - concurrently
 
 ---
+Features
+Authentication
+
+User login with backend API
+
+Auth state stored in local storage
+
+Navbar updates immediately after login/logout using React Context
+
+Logout support
+
+Product Browsing
+
+Browse products in a responsive UI
+
+View recommendation-related product content
+
+Structured card-based layout
+
+Event Tracking
+
+Display tracked user interactions or event data
+
+Useful for recommendation logic demonstration
+
+Recommendation Flow
+
+Supports recommendation-oriented UI design
+
+Can be extended with personalized ranking or filtering logic
+
+Suitable for future expansion into AI or behavior-based recommendation
+
+Getting Started
+1. Clone the repository
+git clone <your-repository-url>
+cd recommendation-demo
+2. Install dependencies
+
+Install dependencies for the root, frontend, and backend.
+
+Root
+npm install
+Frontend
+npm install --prefix frontemd
+Backend
+npm install --prefix backend
+3. Configure environment variables
+
+Create a .env file inside the backend folder.
+
+Example:
+
+PORT=5000
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+JWT_SECRET=your_secret_key
+
+Update the values based on your local PostgreSQL configuration.
+
+4. Run the project
+
+Start both frontend and backend together from the root directory:
+
+npm run dev
+
+This will run:
+
+Backend server
+
+Frontend Vite development server
+
+Available Scripts
+Root
+npm run dev
+
+Runs frontend and backend together.
+
+npm run frontend
+
+Runs only the frontend.
+
+npm run backend
+
+Runs only the backend.
+
+Frontend
+
+Inside frontemd/package.json, typical scripts include:
+
+npm run dev
+npm run build
+npm run preview
+Backend
+
+Inside backend/package.json, typical scripts include:
+
+npm run dev
+Authentication Flow
+
+User enters email and password in the login page
+
+Frontend sends a request to the backend login API
+
+Backend validates credentials
+
+Backend returns user data (and token if enabled)
+
+Frontend stores auth info locally
+
+AuthContext updates the global auth state
+
+Navbar immediately reflects the login state

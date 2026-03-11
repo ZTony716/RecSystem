@@ -142,9 +142,9 @@ Update the values based on your local PostgreSQL configuration.
 ### Run the project
 
 Start both frontend and backend together from the root directory:
-
+```bash
 npm run dev
-
+```
 This will run:
 
 - Backend server

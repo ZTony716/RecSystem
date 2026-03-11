@@ -1,6 +1,6 @@
 const pool = require("../db");
 
-// GET Porducts detial
+// GET Porducts information
 const getAllProducts = async (req, res) => {
   try {
     const result = await pool.query(`
@@ -34,7 +34,7 @@ const getAllProducts = async (req, res) => {
   }
 };
 
-// 获取单个商品详情
+// get product detail
 const getProductById = async (req, res) => {
   const { id } = req.params;
 
@@ -79,7 +79,7 @@ const getProductById = async (req, res) => {
   }
 };
 
-// 搜索商品
+// search products
 const searchProducts = async (req, res) => {
   const { q } = req.query;
 
@@ -135,3 +135,4 @@ module.exports = {
   searchProducts,
 
 };
+

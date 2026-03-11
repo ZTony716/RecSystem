@@ -58,8 +58,8 @@ The goal of this project is to simulate a real-world intelligent recommendation 
 - concurrently
 
 ---
-Features
-Authentication
+# Features
+### Authentication
 
 User login with backend API
 
@@ -69,7 +69,7 @@ Navbar updates immediately after login/logout using React Context
 
 Logout support
 
-Product Browsing
+### Product Browsing
 
 Browse products in a responsive UI
 
@@ -77,13 +77,13 @@ View recommendation-related product content
 
 Structured card-based layout
 
-Event Tracking
+### Event Tracking
 
 Display tracked user interactions or event data
 
 Useful for recommendation logic demonstration
 
-Recommendation Flow
+### Recommendation Flow
 
 Supports recommendation-oriented UI design
 
@@ -91,21 +91,30 @@ Can be extended with personalized ranking or filtering logic
 
 Suitable for future expansion into AI or behavior-based recommendation
 
-Getting Started
-1. Clone the repository
+---
+
+# Getting Started
+### Clone the repository
+
 git clone <your-repository-url>
 cd recommendation-demo
-2. Install dependencies
+
+---
+
+### Install dependencies
 
 Install dependencies for the root, frontend, and backend.
 
-Root
+--Root
 npm install
-Frontend
+--Frontend
 npm install --prefix frontemd
-Backend
+--Backend
 npm install --prefix backend
-3. Configure environment variables
+
+---
+
+### Configure environment variables
 
 Create a .env file inside the backend folder.
 
@@ -121,7 +130,9 @@ JWT_SECRET=your_secret_key
 
 Update the values based on your local PostgreSQL configuration.
 
-4. Run the project
+---
+
+### Run the project
 
 Start both frontend and backend together from the root directory:
 
@@ -129,12 +140,14 @@ npm run dev
 
 This will run:
 
-Backend server
+--Backend server
 
-Frontend Vite development server
+--Frontend Vite development server
 
-Available Scripts
-Root
+---
+
+# Available Scripts
+### Root
 npm run dev
 
 Runs frontend and backend together.
@@ -147,30 +160,36 @@ npm run backend
 
 Runs only the backend.
 
-Frontend
+### Frontend
 
 Inside frontemd/package.json, typical scripts include:
 
 npm run dev
 npm run build
 npm run preview
-Backend
+
+---
+
+### Backend
 
 Inside backend/package.json, typical scripts include:
 
 npm run dev
-Authentication Flow
 
-User enters email and password in the login page
+---
 
-Frontend sends a request to the backend login API
+### Authentication Flow
 
-Backend validates credentials
+--User enters email and password in the login page
 
-Backend returns user data (and token if enabled)
+--Frontend sends a request to the backend login API
 
-Frontend stores auth info locally
+--Backend validates credentials
 
-AuthContext updates the global auth state
+--Backend returns user data (and token if enabled)
 
-Navbar immediately reflects the login state
+--Frontend stores auth info locally
+
+--AuthContext updates the global auth state
+
+--Navbar immediately reflects the login state

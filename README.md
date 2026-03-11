@@ -95,9 +95,10 @@ Suitable for future expansion into AI or behavior-based recommendation
 
 # Getting Started
 ### Clone the repository
-
+```bash
 git clone <your-repository-url>
 cd recommendation-demo
+```
 
 ---
 
@@ -108,9 +109,13 @@ Install dependencies for the root, frontend, and backend.
 -Root
 npm install
 - Frontend
+```bash
 npm install --prefix frontemd
+```
 - Backend
+```bash
 npm install --prefix backend
+```
 
 ---
 
@@ -140,42 +145,43 @@ npm run dev
 
 This will run:
 
--Backend server
+- Backend server
 
--Frontend Vite development server
+- Frontend Vite development server
 
 ---
 
 # Available Scripts
 ### Root
+```bash
 npm run dev
-
+```
 Runs frontend and backend together.
-
+```bash
 npm run frontend
-
+```
 Runs only the frontend.
-
+```bash
 npm run backend
-
+```
 Runs only the backend.
 
 ### Frontend
 
 Inside frontemd/package.json, typical scripts include:
-
+```bash
 npm run dev
 npm run build
 npm run preview
-
+```
 ---
 
 ### Backend
 
 Inside backend/package.json, typical scripts include:
-
+```bash
 npm run dev
-
+```
 ---
 
 ### Authentication Flow

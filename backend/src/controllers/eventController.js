@@ -1,6 +1,6 @@
 const pool = require("../db");
 
-// 记录用户行为
+// Record user behaviors
 const createEvent = async (req, res) => {
   const { user_id, product_id, event_type, event_value } = req.body;
 
@@ -67,4 +67,5 @@ const getEventsByUserId = async (req, res) => {
 module.exports = {
   createEvent,
   getEventsByUserId,
+
 };

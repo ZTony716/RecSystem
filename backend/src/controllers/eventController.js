@@ -35,7 +35,7 @@ const createEvent = async (req, res) => {
   }
 };
 
-// 获取某个用户的行为记录
+// get user behavior history
 const getEventsByUserId = async (req, res) => {
   const { userId } = req.params;
 
@@ -69,3 +69,4 @@ module.exports = {
   getEventsByUserId,
 
 };
+

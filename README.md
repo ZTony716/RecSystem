@@ -107,7 +107,9 @@ cd recommendation-demo
 Install dependencies for the root, frontend, and backend.
 
 - Root
+```bash
 npm install
+```
 - Frontend
 ```bash
 npm install --prefix frontemd

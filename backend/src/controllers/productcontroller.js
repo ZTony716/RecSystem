@@ -1,6 +1,6 @@
 const pool = require("../db");
 
-// 获取所有商品
+// GET Porducts detial
 const getAllProducts = async (req, res) => {
   try {
     const result = await pool.query(`
@@ -133,4 +133,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   searchProducts,
+
 };

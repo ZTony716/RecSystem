@@ -112,7 +112,7 @@ npm install
 ```
 - Frontend
 ```bash
-npm install --prefix frontemd
+npm install --prefix frontend
 ```
 - Backend
 ```bash

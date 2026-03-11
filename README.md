@@ -107,9 +107,9 @@ Install dependencies for the root, frontend, and backend.
 
 -Root
 npm install
--Frontend
+- Frontend
 npm install --prefix frontemd
--Backend
+- Backend
 npm install --prefix backend
 
 ---
@@ -180,16 +180,16 @@ npm run dev
 
 ### Authentication Flow
 
--User enters email and password in the login page
+- User enters email and password in the login page
 
--Frontend sends a request to the backend login API
+- Frontend sends a request to the backend login API
 
--Backend validates credentials
+- Backend validates credentials
 
--Backend returns user data (and token if enabled)
+- Backend returns user data (and token if enabled)
 
--Frontend stores auth info locally
+- Frontend stores auth info locally
 
--AuthContext updates the global auth state
+- AuthContext updates the global auth state
 
--Navbar immediately reflects the login state
+- Navbar immediately reflects the login state

@@ -1,27 +1,27 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import ProductCard from "./ProductCard.jsx";
 
-export default function ProductCard({ p }) {
-  const id = p.id || p.product_id;
-  const name = p.name || p.product_name;
-  const desc = p.desc || p.description;
-  const category = p.category || p.category_name || (p.category_id ? `Category ${p.category_id}` : "Uncategorized");
-
+export default function RecommendedList({
+  items = [],
+  title = "Recommended for You",
+  subtitle = "Based on your recent browsing behavior."
+}) {
   return (
-    <div className="card">
-      <div className="card__top">
-        <div className="pill">{category}</div>
-        <div className="price">${p.price}</div>
+    <section className="section">
+      <div className="section__header">
+        <h2>{title}</h2>
+        <p className="muted">{subtitle}</p>
       </div>
 
-      <h3 className="card__title">{name}</h3>
-      <p className="card__desc">{desc}</p>
-
-      <div className="card__actions">
-        <Link className="btn btn--ghost" to={`/products/${id}`}>
-          View
-        </Link>
-      </div>
-    </div>
+      {items.length === 0 ? (
+        <div className="empty">No recommendations yet. Go view some products!</div>
+      ) : (
+        <div className="grid">
+          {items.map((p) => (
+            <ProductCard key={p.id} p={p} />
+          ))}
+        </div>
+      )}
+    </section>
   );
 }

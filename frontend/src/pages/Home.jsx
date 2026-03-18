@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import RecommendedList from "../components/RecommendedList.jsx";
-import { fetchRecommendations } from "../api/recommendations";
+import { fetchPopularRecommendations } from "../api/recommendations.js";
 
 export default function Home() {
   const [recs, setRecs] = useState([]);
@@ -10,8 +10,8 @@ export default function Home() {
   useEffect(() => {
     async function loadRecommendations() {
       try {
-        const data = await fetchRecommendations(1);
-        setRecs(data);
+        const products = await fetchPopularRecommendations();
+        setRecs(products);
       } catch (error) {
         console.error("Failed to load recommendations:", error);
       } finally {
@@ -55,15 +55,7 @@ export default function Home() {
       {loading ? (
         <div className="empty">Loading recommendations...</div>
       ) : (
-        <RecommendedList
-          items={recs.map((p) => ({
-            id: p.product_id,
-            name: p.product_name,
-            category: p.category_name,
-            price: p.price,
-            desc: p.description,
-          }))}
-        />
+        <RecommendedList items={recs} />
       )}
     </div>
   );

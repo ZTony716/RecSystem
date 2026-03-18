@@ -1,6 +1,8 @@
-const pool = require("../db");
+const {
+  saveEvent,
+  fetchEventsByUserId,
+} = require("../services/eventService");
 
-// Record user behaviors
 const createEvent = async (req, res) => {
   const { user_id, product_id, event_type, event_value } = req.body;
 
@@ -12,19 +14,17 @@ const createEvent = async (req, res) => {
       });
     }
 
-    const result = await pool.query(
-      `
-      INSERT INTO user_events (user_id, product_id, event_type, event_value)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *
-      `,
-      [user_id, product_id || null, event_type, event_value || null]
-    );
+    const event = await saveEvent({
+      user_id,
+      product_id,
+      event_type,
+      event_value,
+    });
 
     res.status(201).json({
       success: true,
       message: "Event recorded successfully",
-      data: result.rows[0],
+      data: event,
     });
   } catch (error) {
     console.error("Error creating event:", error.message);
@@ -35,25 +35,16 @@ const createEvent = async (req, res) => {
   }
 };
 
-// get user behavior history
 const getEventsByUserId = async (req, res) => {
   const { userId } = req.params;
 
   try {
-    const result = await pool.query(
-      `
-      SELECT *
-      FROM user_events
-      WHERE user_id = $1
-      ORDER BY event_time DESC
-      `,
-      [userId]
-    );
+    const events = await fetchEventsByUserId(userId);
 
     res.status(200).json({
       success: true,
-      count: result.rows.length,
-      data: result.rows,
+      count: events.length,
+      data: events,
     });
   } catch (error) {
     console.error("Error fetching user events:", error.message);
@@ -67,6 +58,4 @@ const getEventsByUserId = async (req, res) => {
 module.exports = {
   createEvent,
   getEventsByUserId,
-
 };
-

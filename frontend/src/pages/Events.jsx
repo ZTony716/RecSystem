@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { fetchEventsByUserId } from "../api/events";
+import { getCurrentUser } from "../utils/auth";
 
 export default function Events() {
   const [events, setEvents] = useState([]);
@@ -8,7 +9,13 @@ export default function Events() {
   useEffect(() => {
     async function loadEvents() {
       try {
-        const data = await fetchEventsByUserId(1);
+        const currentUser = getCurrentUser();
+        const userId = currentUser?.user_id || 1;
+
+        console.log("Current user:", currentUser);
+        console.log("Loading events for userId:", userId);
+
+        const data = await fetchEventsByUserId(userId);
         setEvents(data);
       } catch (error) {
         console.error("Failed to load events:", error);
@@ -25,7 +32,7 @@ export default function Events() {
       <div className="pageHeader">
         <div>
           <h2>Tracking Events</h2>
-          <p className="muted">User behavior events stored in PostgreSQL.</p>
+          <p className="muted">User behavior events stored in PostgreSQL for the current user.</p>
         </div>
       </div>
 

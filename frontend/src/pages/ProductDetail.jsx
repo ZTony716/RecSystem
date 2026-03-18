@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
 import { fetchProductById } from "../api/products.js";
+import {
+  fetchSimilarRecommendations,
+  fetchAlsoViewedRecommendations,
+} from "../api/recommendations.js";
+import { createEvent } from "../api/events.js";
+import { getCurrentUser } from "../utils/auth";
+import RecommendedList from "../components/RecommendedList.jsx";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
+  const [similarProducts, setSimilarProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [similarLoading, setSimilarLoading] = useState(false);
+  const [alsoViewedProducts, setAlsoViewedProducts] = useState([]);
+  const [alsoViewedLoading, setAlsoViewedLoading] = useState(false);
 
   useEffect(() => {
     loadProduct();
@@ -15,19 +25,102 @@ export default function ProductDetail() {
   async function loadProduct() {
     try {
       setLoading(true);
+
       const data = await fetchProductById(id);
       setProduct(data);
 
-      await axios.post("http://localhost:5000/api/events", {
-        user_id: 1,
+      // Load similar recommendations
+      try {
+        setSimilarLoading(true);
+        const similar = await fetchSimilarRecommendations(data.product_id);
+        setSimilarProducts(similar);
+      } catch (similarError) {
+        console.error("Failed to load similar recommendations:", similarError);
+        setSimilarProducts([]);
+      } finally {
+        setSimilarLoading(false);
+      }
+      // Load also-viewed recommendations
+      try {
+        setAlsoViewedLoading(true);
+        const alsoViewed = await fetchAlsoViewedRecommendations(data.product_id);
+        setAlsoViewedProducts(alsoViewed);
+      } catch (alsoViewedError) {
+        console.error("Failed to load also-viewed recommendations:", alsoViewedError);
+        setAlsoViewedProducts([]);
+      } finally {
+        setAlsoViewedLoading(false);
+      }
+
+      const currentUser = getCurrentUser();
+      const userId = currentUser?.user_id || 1;
+
+      console.log("currentUser:", currentUser);
+      console.log("event payload:", {
+        user_id: userId,
         product_id: data.product_id,
         event_type: "product_view",
         event_value: "Viewed product detail page",
       });
+
+      try {
+        const eventData = await createEvent({
+          user_id: userId,
+          product_id: data.product_id,
+          event_type: "product_view",
+          event_value: "Viewed product detail page",
+        });
+
+        console.log("Event created:", eventData);
+      } catch (eventError) {
+        console.error("Failed to create event:", eventError);
+      }
     } catch (error) {
       console.error("Failed to load product:", error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleAddToCart() {
+    try {
+      if (!product) return;
+
+      const currentUser = getCurrentUser();
+      const userId = currentUser?.user_id || 1;
+
+      const eventData = await createEvent({
+        user_id: userId,
+        product_id: product.product_id,
+        event_type: "add_to_cart",
+        event_value: "Added from product detail page",
+      });
+
+      console.log("Add to cart event created:", eventData);
+      alert("Add to cart event recorded");
+    } catch (error) {
+      console.error("Failed to record add_to_cart:", error);
+    }
+  }
+
+  async function handleBuyNow() {
+    try {
+      if (!product) return;
+
+      const currentUser = getCurrentUser();
+      const userId = currentUser?.user_id || 1;
+
+      const eventData = await createEvent({
+        user_id: userId,
+        product_id: product.product_id,
+        event_type: "purchase_intent",
+        event_value: "User clicked buy now",
+      });
+
+      console.log("Purchase intent event created:", eventData);
+      alert("Purchase intent recorded");
+    } catch (error) {
+      console.error("Failed to record purchase_intent:", error);
     }
   }
 
@@ -57,7 +150,16 @@ export default function ProductDetail() {
           <p className="detail__desc">{product.description}</p>
 
           <div className="detail__note">
-            <b>product_view</b> event into PostgreSQL.
+             User interaction events are being tracked for recommendation improvement.
+          </div>
+
+          <div className="detail__actions">
+            <button className="btn" onClick={handleAddToCart}>
+              Add to Cart
+            </button>
+            <button className="btn btn--ghost" onClick={handleBuyNow}>
+              Buy Now
+            </button>
           </div>
         </div>
 
@@ -73,6 +175,25 @@ export default function ProductDetail() {
           </div>
         </div>
       </section>
+
+      {similarLoading ? (
+        <div className="empty">Loading similar products...</div>
+      ) : (
+        <RecommendedList
+          items={similarProducts}
+          title="Similar Products"
+          subtitle="Products in the same category with similar prices."
+        />
+      )}
+      {alsoViewedLoading ? (
+        <div className="empty">Loading also-viewed products...</div>
+      ) : (
+        <RecommendedList
+          items={alsoViewedProducts}
+          title="Customers Also Viewed"
+          subtitle="Products frequently viewed by users who explored this item."
+        />
+      )}
     </div>
   );
 }

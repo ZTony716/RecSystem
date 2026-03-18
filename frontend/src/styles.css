@@ -194,6 +194,18 @@ main.container { flex: 1; padding: 26px 0 40px; }
   color: var(--text);
 }
 
+.detail__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.detail__actions .btn {
+  min-width: 140px;
+  justify-content: center;
+}
+
 .breadcrumb { color: var(--muted); }
 .panel h3 { margin: 0 0 8px; }
 .list { margin: 0; padding-left: 16px; color: var(--text); }

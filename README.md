@@ -201,3 +201,17 @@ npm run dev
 - AuthContext updates the global auth state
 
 - Navbar immediately reflects the login state
+
+## Recommendation Logic
+
+This project uses a hybrid recommendation system that combines weighted user behavior, personalized category preference, and product relationship analysis.
+
+The main recommendation strategies include:
+- Weighted Popular Recommendation
+- Personalized Recommendation
+- Similar Product Recommendation
+- Also-Viewed Recommendation
+
+User events such as `product_view`, `add_to_cart`, and `purchase_intent` are assigned different weights to better reflect user interest.
+
+For a more detailed explanation, see [Recommendation_Algorithm.md](./Recommendation_Algorithm.md).

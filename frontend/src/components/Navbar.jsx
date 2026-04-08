@@ -46,6 +46,9 @@ export default function Navbar() {
           >
             Events
           </NavLink>
+          <NavLink className="nav__link" to="/cart">
+            Cart
+          </NavLink>
         </nav>
 
         <div className="navAuth">

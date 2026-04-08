@@ -6,6 +6,7 @@ import Products from "./pages/Products.jsx";
 import ProductDetail from "./pages/ProductDetail.jsx";
 import Events from "./pages/Events.jsx";
 import Login from "./pages/Login.jsx";
+import Cart from "./pages/Cart";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/events" element={<Events />} />
           <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </main>
       <footer className="footer">

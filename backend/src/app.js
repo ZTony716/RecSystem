@@ -6,6 +6,7 @@ const productRoutes = require("./routes/productRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const recommendationRoutes = require("./routes/recommendationRoutes");
 const authRoutes = require("./routes/authRoutes");
+const aiRoutes = require("./routes/aiRoutes")
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/recommendations", recommendationRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/ai", aiRoutes)
 
 const PORT = process.env.PORT || 5000;
 

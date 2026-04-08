@@ -11,12 +11,21 @@ async function getUserRecommendations(userId) {
       p.category_id,
       c.category_name,
       SUM(
-        CASE
-          WHEN e.event_type = 'product_view' THEN 1
-          WHEN e.event_type = 'add_to_cart' THEN 3
-          WHEN e.event_type = 'purchase_intent' THEN 5
-          ELSE 0
-        END
+        (
+          CASE
+            WHEN e.event_type = 'product_view' THEN 1
+            WHEN e.event_type = 'add_to_cart' THEN 3
+            WHEN e.event_type = 'purchase_intent' THEN 5
+            ELSE 0
+          END
+        ) *
+        (
+          CASE
+            WHEN e.event_time >= NOW() - INTERVAL '7 days' THEN 1.0
+            WHEN e.event_time >= NOW() - INTERVAL '30 days' THEN 0.7
+            ELSE 0.4
+          END
+        )
       ) AS preference_score
     FROM user_events e
     JOIN products p
@@ -224,13 +233,4 @@ async function getAlsoViewedRecommendations(productId) {
     LIMIT 6
   `;
 
-  const result = await pool.query(alsoViewedQuery, [productId]);
-  return result.rows;
-}
-
-module.exports = {
-  getUserRecommendations,
-  getPopularRecommendations,
-  getSimilarRecommendations,
-  getAlsoViewedRecommendations
-};
+  

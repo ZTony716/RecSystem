@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import RecommendedList from "../components/RecommendedList.jsx";
 import { fetchPopularRecommendations } from "../api/recommendations.js";
-import { explainRecommendations } from "../api/ai";
+import { explainRecommendations, askAssistant } from "../api/ai";
 
 export default function Home() {
   const [recs, setRecs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [aiExplanation, setAiExplanation] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
+  const [assistantInput, setAssistantInput] = useState("");
+  const [assistantResult, setAssistantResult] = useState(null);
+  const [assistantLoading, setAssistantLoading] = useState(false);
 
   async function loadAiExplanation(recommendations) {
     try {
@@ -32,7 +35,33 @@ export default function Home() {
     }
   }
 
-  useEffect(() => {
+  async function handleAssistantAsk() {
+    if (!assistantInput.trim() || recs.length === 0) return;
+
+    try {
+      setAssistantLoading(true);
+
+      const result = await askAssistant({
+        message: assistantInput,
+        topCategories: ["Electronics", "Sports"],
+        recentEventTypes: ["product_view", "add_to_cart"],
+        recommendations: recs.map((item) => ({
+          name: item.name,
+          category: item.category,
+          price: item.price,
+          description: item.desc || item.description || "",
+        })),
+      });
+
+      setAssistantResult(result);
+    } catch (error) {
+      console.error("Failed to load assistant response:", error);
+      setAssistantResult(null);
+    } finally {
+      setAssistantLoading(false);
+    }
+  }
+    useEffect(() => {
     async function loadRecommendations() {
       try {
         const products = await fetchPopularRecommendations();
@@ -128,6 +157,48 @@ export default function Home() {
           Recommendation explanations are unavailable right now, but the ranking system is still working normally.
         </div>
       )}
+
+      <section className="section">
+        <div className="section__header">
+          <h2>AI Shopping Assistant</h2>
+          <p className="muted">
+            Tell the assistant what you want, and it will narrow down the best options from the current recommendations.
+          </p>
+        </div>
+
+        <div className="stack">
+          <input
+            className="search__input"
+            type="text"
+            value={assistantInput}
+            onChange={(e) => setAssistantInput(e.target.value)}
+            placeholder="Example: I want something affordable for a gift"
+          />
+          <button className="btn" onClick={handleAssistantAsk} disabled={assistantLoading}>
+            {assistantLoading ? "Thinking..." : "Ask Assistant"}
+          </button>
+        </div>
+
+        {assistantResult && (
+          <div className="section" style={{ marginTop: "16px" }}>
+            <p>{assistantResult.reply}</p>
+
+            {assistantResult.picks?.length > 0 && (
+              <ul className="list">
+                {assistantResult.picks.map((item, index) => (
+                  <li key={index}>
+                    <span className="muted">{item.productName}:</span> {item.reason}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {assistantResult.followUp && (
+              <div className="note">{assistantResult.followUp}</div>
+            )}
+          </div>
+        )}
+      </section>
 
       {loading ? (
         <div className="empty">Loading weighted recommendations...</div>

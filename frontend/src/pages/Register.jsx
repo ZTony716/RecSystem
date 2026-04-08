@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { login } from "../api/auth";
+import { register } from "../api/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
-export default function Login() {
-  const [email, setEmail] = useState("demo@example.com");
-  const [password, setPassword] = useState("123456");
+export default function Register() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
   const { loginAuth } = useAuth();
 
@@ -14,18 +16,16 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const result = await login(email, password);
-
+      const result = await register(username, email, password);
       const user = result.user || result;
       const token = result.token || "";
 
       loginAuth(user, token);
-
       setMessage(`Welcome, ${user.username}`);
       navigate("/");
     } catch (error) {
       console.error(error);
-      setMessage("Login failed");
+      setMessage(error.message || "Register failed");
     }
   }
 
@@ -33,13 +33,20 @@ export default function Login() {
     <div className="stack">
       <div className="pageHeader">
         <div>
-          <h2>Login</h2>
-          <p className="muted">Simple demo login for the recommendation system.</p>
+          <h2>Register</h2>
+          <p className="muted">Create your account.</p>
         </div>
       </div>
 
       <form className="section" onSubmit={handleSubmit}>
         <div className="stack">
+          <input
+            className="search__input"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="Username"
+          />
           <input
             className="search__input"
             type="email"
@@ -54,13 +61,13 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
           />
-          <button className="btn" type="submit">Login</button>
+          <button className="btn" type="submit">Register</button>
           {message && <div className="note">{message}</div>}
         </div>
       </form>
 
       <div className="note">
-        Don&apos;t have an account? <Link to="/register">Register</Link>
+        Already have an account? <Link to="/login">Login</Link>
       </div>
     </div>
   );

@@ -8,15 +8,17 @@ import {
 import { createEvent } from "../api/events.js";
 import { getCurrentUser } from "../utils/auth";
 import RecommendedList from "../components/RecommendedList.jsx";
+import { addToCart } from "../utils/cart";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [alsoViewedProducts, setAlsoViewedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [similarLoading, setSimilarLoading] = useState(false);
-  const [alsoViewedProducts, setAlsoViewedProducts] = useState([]);
   const [alsoViewedLoading, setAlsoViewedLoading] = useState(false);
+  const [actionMessage, setActionMessage] = useState("");
 
   useEffect(() => {
     loadProduct();
@@ -25,11 +27,11 @@ export default function ProductDetail() {
   async function loadProduct() {
     try {
       setLoading(true);
+      setActionMessage("");
 
       const data = await fetchProductById(id);
       setProduct(data);
 
-      // Load similar recommendations
       try {
         setSimilarLoading(true);
         const similar = await fetchSimilarRecommendations(data.product_id);
@@ -40,7 +42,7 @@ export default function ProductDetail() {
       } finally {
         setSimilarLoading(false);
       }
-      // Load also-viewed recommendations
+
       try {
         setAlsoViewedLoading(true);
         const alsoViewed = await fetchAlsoViewedRecommendations(data.product_id);
@@ -55,23 +57,13 @@ export default function ProductDetail() {
       const currentUser = getCurrentUser();
       const userId = currentUser?.user_id || 1;
 
-      console.log("currentUser:", currentUser);
-      console.log("event payload:", {
-        user_id: userId,
-        product_id: data.product_id,
-        event_type: "product_view",
-        event_value: "Viewed product detail page",
-      });
-
       try {
-        const eventData = await createEvent({
+        await createEvent({
           user_id: userId,
           product_id: data.product_id,
           event_type: "product_view",
           event_value: "Viewed product detail page",
         });
-
-        console.log("Event created:", eventData);
       } catch (eventError) {
         console.error("Failed to create event:", eventError);
       }
@@ -82,27 +74,27 @@ export default function ProductDetail() {
     }
   }
 
-  async function handleAddToCart() {
-    try {
-      if (!product) return;
+async function handleAddToCart() {
+  try {
+    if (!product) return;
 
-      const currentUser = getCurrentUser();
-      const userId = currentUser?.user_id || 1;
+    const currentUser = getCurrentUser();
+    const userId = currentUser?.user_id || 1;
 
-      const eventData = await createEvent({
-        user_id: userId,
-        product_id: product.product_id,
-        event_type: "add_to_cart",
-        event_value: "Added from product detail page",
-      });
+    await createEvent({
+      user_id: userId,
+      product_id: product.product_id,
+      event_type: "add_to_cart",
+      event_value: "Added from product detail page",
+    });
 
-      console.log("Add to cart event created:", eventData);
-      alert("Add to cart event recorded");
-    } catch (error) {
-      console.error("Failed to record add_to_cart:", error);
-    }
+    addToCart(product);
+    setActionMessage("Product added to cart and cart activity recorded.");
+  } catch (error) {
+    console.error("Failed to record add_to_cart:", error);
+    setActionMessage("Failed to add product to cart.");
   }
-
+}
   async function handleBuyNow() {
     try {
       if (!product) return;
@@ -110,22 +102,22 @@ export default function ProductDetail() {
       const currentUser = getCurrentUser();
       const userId = currentUser?.user_id || 1;
 
-      const eventData = await createEvent({
+      await createEvent({
         user_id: userId,
         product_id: product.product_id,
         event_type: "purchase_intent",
         event_value: "User clicked buy now",
       });
 
-      console.log("Purchase intent event created:", eventData);
-      alert("Purchase intent recorded");
+      setActionMessage("Purchase intent recorded successfully.");
     } catch (error) {
       console.error("Failed to record purchase_intent:", error);
+      setActionMessage("Failed to record purchase intent.");
     }
   }
 
   if (loading) {
-    return <div className="empty">Loading product...</div>;
+    return <div className="empty">Loading product details...</div>;
   }
 
   if (!product) {
@@ -139,7 +131,7 @@ export default function ProductDetail() {
   return (
     <div className="stack">
       <div className="breadcrumb">
-        <Link to="/products">← Back</Link>
+        <Link to="/products">← Back to Products</Link>
       </div>
 
       <section className="detail">
@@ -150,7 +142,7 @@ export default function ProductDetail() {
           <p className="detail__desc">{product.description}</p>
 
           <div className="detail__note">
-             User interaction events are being tracked for recommendation improvement.
+            This page contributes user behavior signals to the recommendation engine.
           </div>
 
           <div className="detail__actions">
@@ -161,37 +153,59 @@ export default function ProductDetail() {
               Buy Now
             </button>
           </div>
+
+          {actionMessage ? <div className="note">{actionMessage}</div> : null}
         </div>
 
         <div className="detail__side">
           <div className="panel">
             <h3>Quick Info</h3>
             <ul className="list">
-              <li><span className="muted">Product ID:</span> {product.product_id}</li>
-              <li><span className="muted">Category:</span> {product.category_name}</li>
-              <li><span className="muted">Price:</span> ${product.price}</li>
-              <li><span className="muted">Stock:</span> {product.stock_quantity}</li>
+              <li>
+                <span className="muted">Product ID:</span> {product.product_id}
+              </li>
+              <li>
+                <span className="muted">Category:</span> {product.category_name}
+              </li>
+              <li>
+                <span className="muted">Price:</span> ${product.price}
+              </li>
+              <li>
+                <span className="muted">Stock:</span> {product.stock_quantity}
+              </li>
+            </ul>
+          </div>
+
+          <div className="panel">
+            <h3>Recommendation Signals</h3>
+            <ul className="list">
+              <li><span className="muted">Content-based:</span> category + price similarity</li>
+              <li><span className="muted">Behavior-based:</span> co-view relationships</li>
+              <li><span className="muted">Tracking:</span> product view, cart, purchase intent</li>
             </ul>
           </div>
         </div>
       </section>
 
       {similarLoading ? (
-        <div className="empty">Loading similar products...</div>
+        <div className="empty">Loading similar recommendations...</div>
       ) : (
         <RecommendedList
           items={similarProducts}
           title="Similar Products"
-          subtitle="Products in the same category with similar prices."
+          subtitle="Recommended by category similarity and price proximity."
+          variant="similar"
         />
       )}
+
       {alsoViewedLoading ? (
-        <div className="empty">Loading also-viewed products...</div>
+        <div className="empty">Loading customer behavior recommendations...</div>
       ) : (
         <RecommendedList
           items={alsoViewedProducts}
           title="Customers Also Viewed"
-          subtitle="Products frequently viewed by users who explored this item."
+          subtitle="Recommended from co-view behavior of users who explored this product."
+          variant="alsoViewed"
         />
       )}
     </div>
